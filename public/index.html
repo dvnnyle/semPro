@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Routes Testing</title>
+</head>
+<body>
+    <h1>User Routes Testing</h1>
+
+    <!-- Create New User Form -->
+    <h2>Create New User</h2>
+    <form id="createUserForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="button" onclick="createUser()">Create User</button>
+    </form>
+
+    <script>
+        async function createUser() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:8080/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('User created successfully:', data);
+                    alert('User created successfully!');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error creating user:', errorData);
+                    alert('Error creating user: ' + errorData.error);
+                }
+            } catch (error) {
+                console.error('Error creating user:', error);
+                alert('An error occurred while creating the user. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
